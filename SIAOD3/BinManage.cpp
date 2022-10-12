@@ -106,7 +106,6 @@ bool delIDRecInBin(string binName, int ID)
         z++;
     }
     fin.close();
-    fin.close();
     ofstream fout(binName, ios::binary | ios::trunc);
     if (!fout.is_open())
     {
@@ -126,11 +125,29 @@ bool delIDRecInBin(string binName, int ID)
 Product getOneProduct(string binName, int pos)
 {
     ifstream fin(binName, ios::binary | ios::beg);
-    fin.seekg(pos * (sizeof Product));
-    Product tmp;
-    fin.read((char*)&tmp, sizeof Product);
+    //fin.seekg(pos * (sizeof Product));
+    //Product tmp;
+    //fin.read((char*)&tmp, sizeof Product);
+    //fin.close();
+    //Product res = tmp;
+    Product res = { -1, "0", 0, "0" };
+    fin.seekg(0, ios::end);
+    int size = fin.tellg();
+    size = size / sizeof(Product);
+    if (pos < size) 
+    {
+        fin.seekg(0, ios::beg);
+        Product* tmp = new Product[size];
+        int z = 0;
+        while (z < size)
+        {
+            fin.read((char*)&tmp[z], sizeof(Product));
+            z++;
+        }
+        res = tmp[pos]; 
+    }
     fin.close();
-    return tmp;
+    return res;
 }
 void printBinFile(string binName)
 {

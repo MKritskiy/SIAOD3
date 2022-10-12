@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinHashManage.cpp" />
     <ClCompile Include="BinManage.cpp" />
     <ClCompile Include="HashManage.cpp" />
     <ClCompile Include="SIAOD3.cpp" />

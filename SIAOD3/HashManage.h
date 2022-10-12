@@ -6,14 +6,14 @@ using namespace std;
 
 
 
-int HashOpenAdress(const Product& s, int table_size);
+int HashOpenAdress(const int& key, int table_size);
 
 struct Node
 {
-    Product value;
+    int key;
     bool state; // если значение флага state = false, значит элемент массива был удален (deleted)
     int recNum;
-    Node(const Product& val) : value(val), state(true) {}
+    Node(const int& val) : key(val), state(true), recNum(-1) {}
 };
 
 class HashTable
@@ -30,11 +30,12 @@ public:
     HashTable();
     void Resize();
     void Rehash();
-    int Find(const Product& value);
-    bool Remove(const Product& value);
-    bool Add(const Product& value);
+    int Find(const int& value);
+    Node GetNode(int ind);
+    bool Remove(const int& value);
+    bool Add(const int& value, int recNum);
     int getLastPos();
-    int THash(const Product& p) const;
+    int THash(const int& p) const;
     void printIndexes();
     ~HashTable();
 };
