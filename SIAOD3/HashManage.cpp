@@ -43,6 +43,8 @@ void HashTable::Rehash()
 {
     size_all_non_nullptr = 0;
     size = 0;
+    if (size_all_non_nullptr > buffer_size / 2)
+        buffer_size /= 2;
     Node** arr2 = new Node*[buffer_size];
     for (int i = 0; i < buffer_size; ++i)
         arr2[i] = nullptr;
@@ -115,6 +117,7 @@ bool HashTable::Add(const int& key, int recNum)
             return false; // такой элемент уже есть, а значит его нельз€ вставл€ть повторно
         if (!arr[h1]->state) // находим место дл€ нового элемента
         {
+            cout << "Colision was solved!\n";
             first_deleted = h1;
             break;
         }

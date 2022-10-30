@@ -33,7 +33,7 @@ public:
     int Find(const int& value);
     Node GetNode(int ind);
     bool Remove(const int& value);
-    bool Add(const int& value, int recNum);
+    bool Add(const int& value, int recNum = -1);
     int getLastPos();
     int THash(const int& p) const;
     void printIndexes();

@@ -36,7 +36,7 @@ int testHash()
         {
         case 'a':
 
-            res = hTable.Add(p.ID, 0); //Добавление элемента
+            res = hTable.Add(p.ID); //Добавление элемента
             if (res)
             {
                 cout << "It was added on " << hTable.getLastPos() << endl;
@@ -214,7 +214,9 @@ int testBinHash()
                 cout << "Deleting was successfull\n";
             else
                 cout << "Oops! Something is wrong...\n";
+            cout << binName << ":\n";
             printBinFile(binName);
+            cout << "Hash table: \n";
             table.printIndexes();
             break;
         case 'f':
@@ -237,7 +239,9 @@ int testBinHash()
             cout << "\tDate: " << tmp.date << endl;
             break;
         case 'p':
+            cout << binName << ":\n";
             printBinFile(binName);
+            cout << "Hash table: \n";
             table.printIndexes();
             break;
         case 'b':
@@ -253,7 +257,30 @@ int testBinHash()
     }
     return 0;
 }
+
 int main()
 {
-    testBinHash();
+    while (true)
+    {
+        char choice;
+        cout << "1 - test hash table\n2 - test work with bin file\n3 - test bin and hash work\n";
+        cin >> choice;
+        if (choice == 'b')
+            break;
+        switch (choice)
+        {
+        case '1':
+            testHash();
+            break;
+        case '2':
+            testBin();
+            break;
+        case '3':
+            testBinHash();
+            break;
+        default:
+            cout << "Oops! Uncorrect input";
+            break;
+        }
+    }
 }
