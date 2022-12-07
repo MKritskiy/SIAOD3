@@ -12,11 +12,13 @@ bool createBinFromTxt(string txtName, string binName)
     while (fin.good()) 
     {
         fin >> tmp.ID;
+        if (!fin.good())
+            break;
         fin.get();
-        getline(fin, tmp.name);
+        fin.getline(tmp.name, 256);
         fin >> tmp.cost;
         fin.get();
-        getline(fin, tmp.date);
+        fin.getline(tmp.date, 11);
         fout.write((char*)&tmp, sizeof Product);
     }
     fin.close();
@@ -24,63 +26,17 @@ bool createBinFromTxt(string txtName, string binName)
     return true;
 }
 
-bool addRecInBin(Product& p, string binName, int pos) 
+bool addRecInBin(Product& p, string binName) 
 {
     bool res = false;
-
-    ifstream fin(binName, ios::binary | ios::beg);
-    if (!fin.is_open())
+    ofstream fout(binName, ios::binary | ios::app);
+    if (!fout.is_open())
     {
         res = false;
         return res;
     }
-    fin.seekg(0, ios::end);
-    int size = fin.tellg();
-    size = size / sizeof(Product);
-    if (pos < size) {
-        Product* tmp = new Product[size];
-
-        fin.seekg(0, ios::beg);
-        int z = 0;
-        while (z<size)
-        {
-            fin.read((char*)&tmp[z], sizeof(Product));
-            z++;
-        }
-        fin.close();
-        ofstream fout(binName, ios::binary | ios::trunc);
-        if (!fout.is_open())
-        {
-            res = false;
-            return res;
-        }
-        for (int i = 0; i < size+1; i++)
-        {
-            if (i < pos)
-                fout.write((char*)&tmp[i], sizeof(Product));
-            else if (i == pos)
-            {
-                fout.write((char*)&p, sizeof(Product));
-            }
-            else if (i > pos)
-            {
-                fout.write((char*)&tmp[i - 1], sizeof(Product));
-            }
-        }
-
-        fout.close();
-    }
-    else
-    {
-        ofstream fout(binName, ios::binary | ios::app);
-        if (!fout.is_open())
-        {
-            res = false;
-            return res;
-        }
-        fout.write((char*)&p, sizeof(Product));
-        fout.close();
-    }
+    fout.write((char*)&p, sizeof(Product));
+    fout.close();
     res = true;
     return res;
 }
@@ -125,30 +81,32 @@ bool delIDRecInBin(string binName, int ID)
 Product getOneProduct(string binName, int pos)
 {
     ifstream fin(binName, ios::binary | ios::beg);
-    //fin.seekg(pos * (sizeof Product));
-    //Product tmp;
-    //fin.read((char*)&tmp, sizeof Product);
-    //fin.close();
-    //Product res = tmp;
-    Product res = { -1, "0", 0, "0" };
+    Product res;
     fin.seekg(0, ios::end);
     int size = fin.tellg();
     size = size / sizeof(Product);
-    if (pos < size) 
+    if (pos<size)
     {
-        fin.seekg(0, ios::beg);
-        Product* tmp = new Product[size];
-        int z = 0;
-        while (z < size)
-        {
-            fin.read((char*)&tmp[z], sizeof(Product));
-            z++;
-        }
-        res = tmp[pos]; 
+        pos = pos * sizeof(Product);
+        fin.seekg(pos);
+        fin.read((char*)&res, sizeof(Product));
     }
     fin.close();
+    //if (pos < size) 
+    //{
+    //    fin.seekg(0, ios::beg);
+    //    Product* tmp = new Product[size];
+    //    int z = 0;
+    //    while (z < size)
+    //    {
+    //        fin.read((char*)&tmp[z], sizeof(Product));
+    //        z++;
+    //    }
+    //    res = tmp[pos]; 
+    //}  
     return res;
 }
+
 void printBinFile(string binName)
 {
     ifstream fin(binName, ios::binary);

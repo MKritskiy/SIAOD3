@@ -1,5 +1,4 @@
 #include "BinHashManage.h"
-
 bool readAndInsert(string binName, int pos, HashTable& table)
 {
     Product tmp = getOneProduct(binName, pos);

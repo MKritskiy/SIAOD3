@@ -4,6 +4,7 @@
 #include "HashManage.h"
 #include "BinManage.h"
 #include "BinHashManage.h"
+#include <chrono>
 using namespace std;
 
 int testHash()
@@ -74,20 +75,7 @@ int testHash()
     }
     return 0;
 }
-//test.txt
-//bin.bin
-//a
-//20
-//Sguschenka
-//200
-//12.12.2012
-//4
-//a
-//10
-//Moloko
-//80
-//05.10.2022
-//2
+
 int testBin()
 {
     cout << "Enter txt file name: ";
@@ -113,9 +101,7 @@ int testBin()
             cout << "Name: "; cin >> tmp.name;
             cout << "Cost: "; cin >> tmp.cost;
             cout << "Date: "; cin >> tmp.date;
-            cout << "Write the position of new record in bin file: ";
-            cin >> pos;
-            addRecInBin(tmp, binName, pos);
+            addRecInBin(tmp, binName);
             printBinFile(binName);
             break;
         case 'd':
@@ -173,22 +159,22 @@ int testBinHash()
     bool isBreaked = false;
     int pos;
 
+    chrono::steady_clock::time_point start;
+    chrono::steady_clock::time_point end;
+
     while (true) {
         cout << "a - add rec in bin\nr - read from bin and add in table\nd - del rec\nf - find rec\np - print bin file and hash table\nWhat do you want to do: ";
         cin >> choice;
         switch (choice)
         {
         case 'a':
-
             cout << "Fill new record: \n";
-            cout << "ID: "; cin >> tmp.ID;
             cout << "Name: "; cin >> tmp.name;
+            cout << "ID: "; cin >> tmp.ID;
             cout << "Cost: "; cin >> tmp.cost;
             cout << "Date: "; cin >> tmp.date;
-            cout << "Write the position of new record in bin file: ";
-            cin >> pos;
-            addRecInBin(tmp, binName, pos);
-            printBinFile(binName);
+            addRecInBin(tmp, binName);
+            //printBinFile(binName);
             break;
         case 'r':
             cout << "Read all records in file?(y/n): ";
@@ -215,20 +201,22 @@ int testBinHash()
             else
                 cout << "Oops! Something is wrong...\n";
             cout << binName << ":\n";
-            printBinFile(binName);
+            //printBinFile(binName);
             cout << "Hash table: \n";
-            table.printIndexes();
+            //table.printIndexes();
             break;
         case 'f':
             cout << "Write key you want to find: ";
             cin >> pos;
             try
             {
+                start = chrono::steady_clock::now();
                 tmp = findRec(binName, table, pos);
+                end = start = chrono::steady_clock::now();
             }
-            catch (const int exeption)
+            catch (const int exсeption)
             {
-                if (exeption == 0)
+                if (exсeption == 0)
                     cout << "UNCORRECT KEY!\n";
                 break;
             }
@@ -237,6 +225,8 @@ int testBinHash()
             cout << "\tName: " << tmp.name;
             cout << "\tCost: " << tmp.cost;
             cout << "\tDate: " << tmp.date << endl;
+            cout << "Elapsed time: "
+                << chrono::duration_cast<chrono::nanoseconds>(end - start).count()<< " ns;
             break;
         case 'p':
             cout << binName << ":\n";
@@ -260,6 +250,16 @@ int testBinHash()
 
 int main()
 {
+
+    ofstream fin("test.txt", ios::trunc);
+    fin.close();
+
+    fin.open("test.txt", ios::app);
+    for (int i = 1; i < 1000000; i++)
+    {
+        fin << i<<endl<<"Product"<<i<<endl<<i<<endl<<"00.00.0000"<<endl;
+    }
+    fin.close();
     while (true)
     {
         char choice;

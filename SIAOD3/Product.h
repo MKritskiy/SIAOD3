@@ -2,8 +2,8 @@
 #include <string>
 struct Product
 {
-    int ID;
-    std::string name;
-    int cost;
-    std::string date;
+    int ID = -1;
+    char name[256];
+    int cost = 0;
+    char date[11];
 };
