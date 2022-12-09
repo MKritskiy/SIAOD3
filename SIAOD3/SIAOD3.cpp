@@ -159,11 +159,16 @@ int testBinHash()
     bool isBreaked = false;
     int pos;
 
+    pos = 0;
+    while (readAndInsert(binName, pos, table)) {
+        pos++;
+    }
+
     chrono::steady_clock::time_point start;
     chrono::steady_clock::time_point end;
 
     while (true) {
-        cout << "a - add rec in bin\nr - read from bin and add in table\nd - del rec\nf - find rec\np - print bin file and hash table\nWhat do you want to do: ";
+        cout << "a - add rec in bin\nd - del rec\nf - find rec\np - print bin file and hash table\nWhat do you want to do: ";
         cin >> choice;
         switch (choice)
         {
@@ -174,24 +179,9 @@ int testBinHash()
             cout << "Cost: "; cin >> tmp.cost;
             cout << "Date: "; cin >> tmp.date;
             addRecInBin(tmp, binName);
+            readAndInsert(binName, pos, table);
+            pos++;
             //printBinFile(binName);
-            break;
-        case 'r':
-            cout << "Read all records in file?(y/n): ";
-            cin >> choice;
-            if (choice == 'y')
-            {
-                pos = 0;
-                while (readAndInsert(binName, pos, table)) {
-                    pos++;
-                }
-            }
-            else if (choice == 'n') 
-            {
-                cout << "Write record number you want to read and add to table: ";
-                cin >> pos;
-                readAndInsert(binName, pos, table);
-            }
             break;
         case 'd':
             cout << "Write ID you want to delete: ";
@@ -226,7 +216,7 @@ int testBinHash()
             cout << "\tCost: " << tmp.cost;
             cout << "\tDate: " << tmp.date << endl;
             cout << "Elapsed time: "
-                << chrono::duration_cast<chrono::nanoseconds>(end - start).count()<< " ns;
+                << chrono::duration_cast<chrono::nanoseconds>(end - start).count()<< " ns\n";
             break;
         case 'p':
             cout << binName << ":\n";
@@ -257,7 +247,7 @@ int main()
     fin.open("test.txt", ios::app);
     for (int i = 1; i < 1000000; i++)
     {
-        fin << i<<endl<<"Product"<<i<<endl<<i<<endl<<"00.00.0000"<<endl;
+        fin << i<<endl<<"Product"<<i<<endl<<i<<endl<<"01.01.1970"<<endl;
     }
     fin.close();
     while (true)

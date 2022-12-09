@@ -92,18 +92,6 @@ Product getOneProduct(string binName, int pos)
         fin.read((char*)&res, sizeof(Product));
     }
     fin.close();
-    //if (pos < size) 
-    //{
-    //    fin.seekg(0, ios::beg);
-    //    Product* tmp = new Product[size];
-    //    int z = 0;
-    //    while (z < size)
-    //    {
-    //        fin.read((char*)&tmp[z], sizeof(Product));
-    //        z++;
-    //    }
-    //    res = tmp[pos]; 
-    //}  
     return res;
 }
 
